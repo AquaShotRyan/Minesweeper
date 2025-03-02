@@ -1,15 +1,30 @@
 import pygame,sys,time,random
+LIGHT_GRAY = (170, 170, 170)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (57, 168, 23)
+BLUE = (30, 60, 183)
+PURPLE = (71, 19, 139)
+WHITE = (250, 250, 250)
+MINE = 10 # how mines are defined in the board
+EMPTY = 0  # how non-mines are defined in the board
+FLAG = "|"  # how falgs are defined in the flag board
+WINDOW_WIDTH = 500
+WINDOW_HEIGHT = 700
 
-def write_text(screen,text, x, y, c, font): #function that writes text on the screen
+# writes text on the screen
+def write_text(screen,text, x, y, c, font): 
     font = pygame.font.SysFont(None, font)
     img = font.render(text, True, c)
     screen.blit(img, (x, y))
 
-def reset_flags(): #resets all the flags placed to blanks
+# resets flags
+def reset_flags(): 
     flags = [""] * 100
     return flags
 
-def center_number_X(board,position): #centers numbers on board to make it look nice
+# horizontally centers numbers on board
+def center_number_X(board,position): 
     centeringx = 0
     if 0 <= board[position] <= 9:
         centeringx = 12
@@ -17,7 +32,8 @@ def center_number_X(board,position): #centers numbers on board to make it look n
         centeringx = 2
     return centeringx
 
-def center_number_Y(board,position): #centers numbers on board to make it look nice
+# vertically centers numbers on board
+def center_number_Y(board,position):
     centeringy = 0
     if 0 <= board[position] <= 9:
         centeringy = 8
@@ -25,37 +41,29 @@ def center_number_Y(board,position): #centers numbers on board to make it look n
         centeringy = 8
     return centeringy
 
-def find_colour(display,position): #changes colour of the number
-    #colours
-    gray = (200, 200, 200)
-    light_gray = (170, 170, 170)
-    black = (0, 0, 0)
-    white = (250, 250, 250)
-    red = (255, 0, 0)
-    green = (57, 168, 23)
-    blue = (30, 60, 183)
-    purple = (71, 19, 139)
-    if display[position] == 0:
-        colour = light_gray
-    elif display[position] == 1:
-        colour = blue
-    elif display[position] == 2:
-        colour = green
-    elif display[position] == 3:
-        colour = red
-    elif display[position] == 4:
-        colour = purple
-    else:
-        colour = black
-    return colour
+# colors numbers on the board
+def getColor(display, position): 
+    displayPos = display[position]
+    match displayPos:
+        case 0:
+            return LIGHT_GRAY
+        case 1:
+            return BLUE
+        case 2:
+            return GREEN
+        case 3:
+            return RED
+        case 4:
+            return PURPLE
+        case _:
+            return BLACK
 
+# 'draw' graphical interface of the board
 def draw_board(screen,display,flags,gameover,flag,board,mine):
-    FLAG = "|"  # a flag to keep track of discovered mines
-    MINE = 10  # the "mine"
     for y in range(10):
         for x in range(10):
             position = x + y * 10
-            colour = find_colour(display,position)
+            colour = getColor(display,position)
             centeringx = center_number_X(board,position)
             centeringy = center_number_Y(board,position)
 
@@ -68,7 +76,8 @@ def draw_board(screen,display,flags,gameover,flag,board,mine):
                 if board[position] == MINE:
                     screen.blit(mine, (x * 50, y * 50))
 
-def which_square(x, y): #gives the position of the square clicked
+# returns position of clicked square
+def which_square(x, y): 
     xpos = x // 50
     ypos = y // 50
     result = xpos + (ypos * 10)
@@ -81,9 +90,8 @@ def setup_display():
     display = [""] * 100
     return display
 
-def make_board():#makes the data for the board and sets it up
-    MINE = 10  # the "mine"
-    EMPTY = 0  # the non-mine spaces
+# sets up mines
+def make_board():
     board = [MINE] * 12 + [EMPTY] * 88
     random.shuffle(board)
     return create_numbers(board,MINE)
@@ -114,19 +122,10 @@ def create_numbers(board,MINE):
     return board
 
 def main():
-    # colours
-    black = (0, 0, 0)
-    white = (250, 250, 250)
-    red = (255, 0, 0)
-    green = (57, 168, 23)
-    MINE = 10  # the "mine"
-    FLAG = "|"  # a flag to keep track of discovered mines
-
     #intialize window and intialize pygame
     pygame.init()
-    window_width = 500  # dimensions of window
-    window_height = 700
-    screen = pygame.display.set_mode((window_width, window_height))
+    
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Minesweeper")
 
     mine = pygame.image.load("mine_minesweeper.jpg").convert_alpha()  # mine image
@@ -167,22 +166,22 @@ def main():
                 pygame.display.flip()
 
             seconds = (pygame.time.get_ticks() - start_ticks) // 1000  # keeps track and displays time on screen
-            pygame.draw.rect(screen, black, [0, 505, 500, 200])
-            write_text(screen,"Time: " + str(seconds), 20, 510, white, 70)
+            pygame.draw.rect(screen, BLACK, [0, 505, 500, 200])
+            write_text(screen,"Time: " + str(seconds), 20, 510, WHITE, 70)
 
             for i in display:  # looks for mines to see if player has lost
                 if i == MINE:
                     gameover = True
 
-                    pygame.draw.rect(screen, black, [0, 505, 500, 200])# displays loss screen if lost
-                    write_text(screen, "You exploded!", 85, 600, red, 70)
-                    write_text(screen, "Time: " + str(seconds), 20, 510, white, 70)
+                    pygame.draw.rect(screen, BLACK, [0, 505, 500, 200])# displays loss screen if lost
+                    write_text(screen, "You exploded!", 85, 600, RED, 70)
+                    write_text(screen, "Time: " + str(seconds), 20, 510, WHITE, 70)
 
             if safe_spaces == 88:  # displays win screen if won
                 gameover = True
-                pygame.draw.rect(screen, black, [0, 505, 500, 200])
-                write_text(screen,"You win!", 150, 600, green, 70)
-                write_text(screen,"Time: " + str(seconds), 20, 510, white, 70)
+                pygame.draw.rect(screen, BLACK, [0, 505, 500, 200])
+                write_text(screen,"You win!", 150, 600, GREEN, 70)
+                write_text(screen,"Time: " + str(seconds), 20, 510, WHITE, 70)
 
             draw_board(screen,display,flags,gameover,flag,board,mine)
             pygame.display.flip()
