@@ -53,7 +53,6 @@ class MinesweeperBoard:
   def clickTile(self, row: int, col: int):
     displayTile = self.__displayBoard.get(row, col)
     mineTile = self.__mineBoard.get(row, col)
-    print(self.__safeTilesFound)
     if mineTile == 0:
       self.autoClickTile(row, col)
 
@@ -106,18 +105,3 @@ class MinesweeperBoard:
   
   def getFlag(self):
     return self.FLAG
-
-
-  
-def test():
-  testBoard = MinesweeperBoard()
-  print(testBoard.getMineBoard())
-  testBoard.clickTile(0, 0)
-  print(testBoard.getDisplayBoard())
-
-test()
-        
-
-        
-          
-          

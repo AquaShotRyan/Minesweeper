@@ -1,4 +1,4 @@
-import numpy, random
+import random
 
 class Board:
   def __init__(self, size: int = 10, initValue = 0):
@@ -217,18 +217,4 @@ class Board:
 
   def __str__(self):
     return str(numpy.matrix(self.__board))
-
-def test():
-  testBoard = Board(10)
-
-  print(testBoard)
-
-  testBoard.set(9, 9, 100)
-  testBoard.setRandom(57)
-  print(f"should be 100: {testBoard.get(9, 9)}")
-
-  testBoard.set(2, 2, 400)
-  testBoard.setAdjN(2, 2, 300)
-
-  print(testBoard)
 
