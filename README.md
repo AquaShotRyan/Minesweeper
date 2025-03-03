@@ -5,9 +5,10 @@ I plan on adding the feature where you can click on one 0 and it automatically c
 
 ## How to Run
 
-1. Activate venv
+1. Create and activate venv
 
 ```
+python -m venv
 cd ./venv
 ./Scripts/activate
 ```
@@ -16,4 +17,10 @@ cd ./venv
 
 ```
 pip install -r ./requirements.txt
+```
+
+3. Run the game
+
+```
+python main.py
 ```
