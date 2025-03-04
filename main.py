@@ -108,6 +108,7 @@ def main():
             row, col = convertMouseClick(x, y, board.getSize())
 
             if event.type == pygame.QUIT:
+                pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if row != None and col != None:
@@ -134,4 +135,10 @@ def main():
         draw_board(screen, board, flagImg, mineImg)
         pygame.display.flip()
 main()
-time.sleep(5)
+
+# keep window open until the user wants to exit while True:     
+while True:
+    for event in pygame.event.get():         
+        if event.type == pygame.QUIT:            
+            pygame.quit()             
+            sys.exit()
